@@ -32,8 +32,10 @@ font.set_italic(True)
 smallFont = pygame.font.Font(None, 36)
 
 # Música de fons
+pygame.mixer.init()
 pygame.mixer.music.load(os.path.join(const.BASE_DIR, "assets/audio/Paquito_el_chocolatero.mp3"))
 pygame.mixer.music.play(-1) # Reproduir la cançó en bucle
+pygame.mixer.music.set_volume(0.75) # Ajustar el volumen al 75%
 
 def mostrarPantallaTitol():
     """Mostar la pantalla de títol del joc."""
@@ -46,11 +48,13 @@ def mostrarPantallaTitol():
     textTitol = font.render("Corre Cristià!", True, const.VERD, const.GRIS)
     textInici = smallFont.render("Apreta qualsevol tecla per a començar.", True, const.VERD, const.GRIS)
     textAjuda =smallFont.render("Per a vore els controls apreta la tecla 'H'.", True, const.VERD, const.GRIS)
+    textEixir = smallFont.render("Per a eixir del joc apreta la tecla 'ESC'.", True, const.VERD, const.GRIS)
 
     # Afegir quadres de text a la pantalla
     pantalla.blit(textTitol, textTitol.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 - 200) ))
     pantalla.blit(textInici, textInici.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 150) ))
     pantalla.blit(textAjuda, textAjuda.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 200) ))
+    pantalla.blit(textEixir, textEixir.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 250) ))
     # Actualitzar la pantalla
     pygame.display.flip()
 
@@ -60,10 +64,11 @@ def mostrarPantallaTitol():
         for event in pygame.event.get():
             key = pygame.key.get_pressed()
             if key[pygame.K_h]:
-                # Mostrar la pantalla d'ajuda
+                # Mostrar la pantalla d'ajuda i altra vegada aquesta quan es tanque
                 mostrarPantallaAjuda()
+                esperant = False
                 mostrarPantallaTitol()
-            elif event.type == pygame.QUIT:
+            elif event.type == pygame.QUIT or key[pygame.K_ESCAPE]:
                 # Tancar el joc
                 pygame.quit()
                 exit()
@@ -85,6 +90,7 @@ def mostrarPantallaAjuda():
     textLinia3 = smallFont.render("El joc acaba quan el personatge xoca amb un sable.", True, const.VERD, const.GRIS)
     textLinia4 = smallFont.render("Apreta qualsevol tecla per tornar al joc.", True, const.VERD, const.GRIS)
     textLinia5 = smallFont.render("Utilitza les tecles '<-' i '->' o 'A' i 'D' per a mouret.", True, const.VERD, const.GRIS)
+    textLinia6 = smallFont.render("Apreta la tecla 'ESC' per parar el joc durant la partida.", True, const.VERD, const.GRIS)
     textLiniaF = smallFont.render("Joc v.1 realitzat per VicentMY.", True, const.VERD, const.GRIS)
 
     # Afegir quadres de text a la pantalla
@@ -94,6 +100,7 @@ def mostrarPantallaAjuda():
     pantalla.blit( textLinia3, textLinia3.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 - 50) ))
     pantalla.blit( textLinia4, textLinia4.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 50) ))
     pantalla.blit( textLinia5, textLinia5.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 100) ))
+    pantalla.blit( textLinia6, textLinia6.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 150) ))
     pantalla.blit( textLiniaF, textLiniaF.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 250) ))
     # Actualitzar la pantalla
     pygame.display.flip()
@@ -116,7 +123,7 @@ def mostrarPantallaFinal(puntuacio):
     # Crear quadres de text
     textTitol = font.render("Corre Cristià! - Fi de la partida", True, const.VERD, const.GRIS)
     textPuntuacio = smallFont.render(f"La teua puntuació és {puntuacio} punts.", True, const.VERD, const.GRIS)
-    textFi = smallFont.render("Apreta qualsevol tecla per tancar el joc.", True, const.VERD, const.GRIS)
+    textFi = smallFont.render("Apreta la tecla 'ESC' per tancar el joc.", True, const.VERD, const.GRIS)
     textInstruccio = smallFont.render("Apreta la tecla 'R' per a començar una nova partida ", True, const.VERD, const.GRIS)
 
     # Afegir quadres de text a la pantalla
@@ -135,7 +142,7 @@ def mostrarPantallaFinal(puntuacio):
             if key[pygame.K_r]:
                 # Començar una nova partida
                 main()
-            elif event.type == pygame.QUIT or event.type == pygame.KEYDOWN:
+            elif event.type == pygame.QUIT or key[pygame.K_ESCAPE]:
                 # Tancar el joc
                 pygame.quit()
                 exit()
@@ -179,8 +186,9 @@ def main():
         clock.tick(const.FPS)
 
         # Permitir tancar el joc an qualsevol moment
+        key = pygame.key.get_pressed()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or key[pygame.K_ESCAPE]:
                 run = False
 
         # Actualitzar cada objecte de la llista d'objectes

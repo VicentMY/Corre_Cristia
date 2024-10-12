@@ -19,9 +19,9 @@ class Jugador(pygame.sprite.Sprite):
         # KeyListener per al moviment del jugador
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.speed_x = -5
+            self.speed_x = -7
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.speed_x = 5
+            self.speed_x = 7
         self.rect.x += self.speed_x
 
         # Llimitar el moviment del jugador per a que no isca de la pantalla
