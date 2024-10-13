@@ -34,9 +34,28 @@ smallFont = pygame.font.Font(None, 36)
 # Música de fons
 pygame.mixer.init()
 musica = pygame.mixer.music
-musica.load(os.path.join(const.BASE_DIR, "assets/audio/Paquito_el_chocolatero.mp3"))
+musicaActual = "Paquito_el_chocolatero"
+musica.load(os.path.join(const.BASE_DIR, f"assets/audio/{musicaActual}.mp3"))
 musica.play(-1) # Reproduir la cançó en bucle
 musica.set_volume(1.0) # Ajustar el volum de la música al 100%
+
+def cambiarMusica():
+    """Canviar la cançó que està reproduint-se."""
+    if musica.get_busy():
+        musica.stop()
+    
+    # Treballar amb la variable musicaActual externa
+    global musicaActual
+
+    # Si la nova cançó és Chimo, canviar-la a Paquito el chocolatero i viceversa
+    if musicaActual == "Chimo":
+        musicaActual = "Paquito_el_chocolatero"
+    else:
+        musicaActual = "Chimo"
+
+    musica.load(os.path.join(const.BASE_DIR, f"assets/audio/{musicaActual}.mp3"))
+    musica.play(-1) # Reproduir la nova cançó en bucle
+    musica.set_volume(1.0) # Ajustar el volum de la música al 100%
 
 def mostrarPantallaTitol():
     """Mostar la pantalla de títol del joc."""
@@ -81,6 +100,11 @@ def mostrarPantallaTitol():
                 pausaMusicaFons()
                 tecla_presionada = True
 
+            elif key[pygame.K_n] and not tecla_presionada:
+                # Canviar la cançó de fons
+                cambiarMusica()
+                tecla_presionada = True
+
             elif key[pygame.K_PLUS] and not tecla_presionada:
                 # Pujar el volum de la música
                 pujarVolMusica()
@@ -114,7 +138,8 @@ def mostrarPantallaAjuda():
     textLinia3 = smallFont.render("El joc acaba quan el personatge xoca amb un sable.", True, const.VERD, const.GRIS)
     textLinia4 = smallFont.render("Apreta la tecla 'ESC' per tornar al joc i per parar el joc durant la partida.", True, const.VERD, const.GRIS)
     textLinia5 = smallFont.render("Utilitza les tecles '<-' i '->' o 'A' i 'D' per a mouret cap als costats.", True, const.VERD, const.GRIS)
-    textLinia6 = smallFont.render("Apreta la tecla 'M' per parar la música de fons i '+' o '-' per a pujar o baixar el volumen.", True, const.VERD, const.GRIS)
+    textLinia6 = smallFont.render("Apreta la tecla 'M' per parar la música de fons i 'N' per canviar la cançó.", True, const.VERD, const.GRIS)
+    textLinia7 = smallFont.render("Apreta la tecla '+' per a pujar el volumen de la música i '-' per a baixar-lo.", True, const.VERD, const.GRIS)
     textLiniaF = smallFont.render("Joc v.1 realitzat per VicentMY.", True, const.VERD, const.GRIS)
 
     # Afegir quadres de text a la pantalla
@@ -125,6 +150,7 @@ def mostrarPantallaAjuda():
     pantalla.blit(textLinia4, textLinia4.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 50) ))
     pantalla.blit(textLinia5, textLinia5.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 100) ))
     pantalla.blit(textLinia6, textLinia6.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 150) ))
+    pantalla.blit(textLinia7, textLinia7.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 200) ))
     pantalla.blit(textLiniaF, textLiniaF.get_rect( center=(const.WIDTH / 2, const.HEIGHT / 2 + 250) ))
 
     # Actualitzar la pantalla
@@ -139,6 +165,11 @@ def mostrarPantallaAjuda():
             if key[pygame.K_m] and not tecla_presionada:
                 # Pausar o reanudar la música
                 pausaMusicaFons()
+                tecla_presionada = True
+
+            elif key[pygame.K_n] and not tecla_presionada:
+                # Canviar la cançó de fons
+                cambiarMusica()
                 tecla_presionada = True
 
             elif key[pygame.K_PLUS] and not tecla_presionada:
@@ -195,6 +226,11 @@ def mostrarPantallaFinal(puntuacio):
             elif key[pygame.K_m] and not tecla_presionada:
                 # Pausar o reanudar la música
                 pausaMusicaFons()
+                tecla_presionada = True
+
+            elif key[pygame.K_n] and not tecla_presionada:
+                # Canviar la cançó de fons
+                cambiarMusica()
                 tecla_presionada = True
 
             elif key[pygame.K_PLUS] and not tecla_presionada:
@@ -280,17 +316,23 @@ def main():
             pausaMusicaFons()
             tecla_presionada = True
 
+        # Canviar la cançó de fons
+        elif key[pygame.K_n] and not tecla_presionada:
+                # Canviar la cançó de fons
+                cambiarMusica()
+                tecla_presionada = True
+
         # Pujar o baixar volumen
-        if key[pygame.K_PLUS] and not tecla_presionada:
+        elif key[pygame.K_PLUS] and not tecla_presionada:
             pujarVolMusica()
             tecla_presionada = True
 
-        if key[pygame.K_MINUS] and not tecla_presionada:
+        elif key[pygame.K_MINUS] and not tecla_presionada:
             baixarVolMusica()
             tecla_presionada = True
 
         # Resetejar tecla_pressionada quant no s'apreta cap tecla
-        if not any(key):
+        elif not any(key):
             tecla_presionada = False
 
         # Permitir tancar el joc an qualsevol moment
