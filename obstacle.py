@@ -11,9 +11,10 @@ class Obstacle(pygame.sprite.Sprite):
         # Asignar l'imatge de l'obstacle
         self.image = pygame.image.load(os.path.join(const.BASE_DIR, "assets/img/cimatarra.png")).convert_alpha()
         self.image = pygame.transform.scale(self.image, (const.OBSTACLE_SIZE, const.OBSTACLE_SIZE))
+        self.image = pygame.transform.rotate(self.image, 180)
         # Crear el rectangle de col·lisió
         self.rect = self.image.get_rect()
-        self.rect.width = const.OBSTACLE_SIZE / 2
+        self.rect.width = const.OBSTACLE_SIZE
         # Asignar la posició i la velocitat incials aleatòriament
         self.rect.x = random.randint(0, const.WIDTH - const.OBSTACLE_SIZE)
         self.rect.y = random.randint(-100, -40)

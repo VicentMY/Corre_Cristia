@@ -1,10 +1,13 @@
 """
 Aquest fitxer conté el codi principal del joc "Corre Cristià!".
 El joc consisteix en controlar un personatge que ha d'evitar els sables mentre arreplega taronges per sumar punts.
+
 Les mecàniques del joc són les següents:
     Els sables apareixen a la pantalla i el jugador els ha d'esquivar movent-se cap als costats.
     Hi haurà taronges que donaran 10 punts al jugador per arreplegar cada una.
     El joc acaba quan el personatge xoca amb un sable.
+
+Per a executar el joc, es te que tindre instal·lat Python 3.11.10 o superior i la llibreria Pygame.
 
 Autor: VicentMY
 Versió: 1.0
@@ -39,6 +42,7 @@ musica.load(os.path.join(const.BASE_DIR, f"assets/audio/{musicaActual}.mp3"))
 musica.play(-1) # Reproduir la cançó en bucle
 musica.set_volume(1.0) # Ajustar el volum de la música al 100%
 
+# Funcions per a la música
 def cambiarMusica():
     """Canviar la cançó que està reproduint-se."""
     if musica.get_busy():
@@ -57,6 +61,22 @@ def cambiarMusica():
     musica.play(-1) # Reproduir la nova cançó en bucle
     musica.set_volume(1.0) # Ajustar el volum de la música al 100%
 
+def pausaMusicaFons():
+    """Pausar o reanudar la música de fons."""
+    if musica.get_busy():
+        musica.pause()
+    else:
+        musica.unpause()
+
+def pujarVolMusica():
+    """Pujar el volum de la música de fons."""
+    musica.set_volume(musica.get_volume() + 0.25)
+
+def baixarVolMusica():
+    """Baixar el volum de la música de fons."""
+    musica.set_volume(musica.get_volume() - 0.25)
+
+# Funcions per a les pantalles
 def mostrarPantallaTitol():
     """Mostar la pantalla de títol del joc."""
     # Asignar fons de pantalla
@@ -252,21 +272,7 @@ def mostrarPantallaFinal(puntuacio):
                 # Resetejar tecla_pressionada quant no s'apreta cap tecla (Evita que es repetisca la funció de la tecla)
                 tecla_presionada = False
 
-def pausaMusicaFons():
-    """Pausar o reanudar la música de fons."""
-    if musica.get_busy():
-        musica.pause()
-    else:
-        musica.unpause()
-
-def pujarVolMusica():
-    """Pujar el volum de la música de fons."""
-    musica.set_volume(musica.get_volume() + 0.25)
-
-def baixarVolMusica():
-    """Baixar el volum de la música de fons."""
-    musica.set_volume(musica.get_volume() - 0.25)
-
+# Funció principal
 def main():
     """Funció principal del joc."""
     clock = pygame.time.Clock()
